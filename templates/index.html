@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="/static/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <title>Audio to Text Converter</title>
+</head>
+<body>
+  <h1>AUDIO TO TEXT CONVERTER</h1>
+
+  <!-- File upload form -->
+  <form id="uploadForm" enctype="multipart/form-data">
+    <div class="upload-group">
+      <label for="audio" class="custom-file-upload">CHOOSE FILE</label>
+      <input type="file" id="audio" name="audio" accept="audio/*" required />
+    </div>
+
+    <div class="upload-group">
+      <button type="submit" id="start">Upload</button>
+    </div>
+  </form>
+
+  <div id="loadingOverlay" class="hidden">
+    <div class="spinner"></div>
+    <p>Transcribing... Please wait.</p>
+  </div>
+
+  <div id="text-cont">
+    <textarea id="text" readonly></textarea>
+  </div>
+
+  <div class="upload-group">
+    <input type="text" id="fileName" placeholder="Enter file name for download"/>
+  </div>
+
+  <div class="buttons-cont">
+    <button id="download">Download</button>
+    <button id="copy">Copy</button>
+  </div>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>
