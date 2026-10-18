@@ -1,10 +1,10 @@
 <div align="center">
 
-# Audio to Text Converter System
+<h1>Audio to Text Converter System</h1>
 
-A Flask-based web application that converts uploaded audio files into copyable, downloadable text using OpenAI Whisper.
+<p>A Flask-based web application that converts uploaded audio files into text using OpenAI Whisper.</p>
 
-A personal project developed to practice **Flask, Python, and fundamental web development** while exploring speech recognition and audio processing.
+<p>A personal project developed to practice <b>Flask, Python, and fundamental web development</b> while exploring speech recognition and audio processing.</p>
 
 <p>
   <img src="https://img.shields.io/badge/PYTHON-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
@@ -16,7 +16,7 @@ A personal project developed to practice **Flask, Python, and fundamental web de
   <img src="https://img.shields.io/badge/FFMPEG-007808?style=for-the-badge&logo=ffmpeg&logoColor=white" alt="FFmpeg" />
 </p>
 
-**Status:** Local development project | **Deployment:** Not deployed
+<p><b>Status:</b> Local development project</p>
 
 </div>
 
@@ -45,24 +45,24 @@ The current implementation processes **uploaded audio files**, not live micropho
 
 ## Tech Stack
 
-| Technology | Purpose |
-| --- | --- |
-| Python | Backend application logic and audio-processing pipeline |
-| Flask | Web routes, file uploads, and HTTP responses |
-| OpenAI Whisper | Local speech-to-text inference with the `base` model |
-| Librosa | Loading audio and detecting non-silent intervals |
-| SoundFile | Writing temporary audio chunks |
-| FFmpeg | Converting uploaded audio into WAV |
-| HTML5 | Page structure and file upload form |
-| CSS3 | Interface styling and loading overlay |
-| JavaScript | Asynchronous requests, transcript display, copy, and download |
+| Technology     | Purpose                                                       |
+| -------------- | ------------------------------------------------------------- |
+| Python         | Backend application logic and audio-processing pipeline       |
+| Flask          | Web routes, file uploads, and HTTP responses                  |
+| OpenAI Whisper | Local speech-to-text inference with the `base` model          |
+| Librosa        | Loading audio and detecting non-silent intervals              |
+| SoundFile      | Writing temporary audio chunks                                |
+| FFmpeg         | Converting uploaded audio into WAV                            |
+| HTML5          | Page structure and file upload form                           |
+| CSS3           | Interface styling and loading overlay                         |
+| JavaScript     | Asynchronous requests, transcript display, copy, and download |
 
 ## System Architecture
 
 The browser presents the upload interface and sends an audio file to Flask. The server converts and processes that file locally, runs transcription, formats the result, and returns plain text to the browser.
 
 <div align="center">
-  <img src="docs/images/system-architecture.png" alt="Audio to Text Converter system architecture" width="730" />
+  <img src="assets/system-archi.png" alt="Audio to Text Converter system architecture" width="730" />
 </div>
 
 Uploaded audio files and server-generated transcripts are stored in local `uploads/` and `texts/` directories. They are not automatically deleted by the current implementation.
@@ -70,7 +70,7 @@ Uploaded audio files and server-generated transcripts are stored in local `uploa
 ## Transcription Workflow
 
 <div align="center">
-  <img src="docs/images/transcription-workflow.png" alt="Audio transcription workflow" width="1000" />
+  <img src="assets/app-flow.png" alt="Audio transcription workflow" width="1000" />
 </div>
 
 1. The user selects a local audio file and submits it.
@@ -85,20 +85,20 @@ Uploaded audio files and server-generated transcripts are stored in local `uploa
 
 ```text
 Audio-to-Text-Converter-System/
-├── app.py                 # Flask routes and transcription logic
-├── templates/
-│   └── index.html         # Main HTML interface
+├── assets/
+│   ├── app-flow.png         # Transcription workflow diagram
+│   └── system-archi.png     # System architecture diagram
 ├── static/
-│   ├── main.css           # Interface styles
-│   └── main.js            # Upload, copy, and download behavior
-├── docs/
-│   └── images/            # README diagrams (add from this package)
-│       ├── system-architecture.png
-│       └── transcription-workflow.png
-└── README.md              # Project documentation
+│   ├── main.css             # Interface styling
+│   └── main.js              # Upload, copy, and download behavior
+├── templates/
+│   └── index.html           # Main HTML interface
+├── app.py                   # Flask routes and transcription logic
+├── README.md                # Project documentation
+└── README.txt               # Original project notes
 ```
 
-The app creates `uploads/` and `texts/` at runtime. These directories are not included in the original source tree.
+The application creates `uploads/` and `texts/` at runtime. These folders are not part of the original source code and should not be committed if they contain audio or transcripts.
 
 ## Getting Started
 
@@ -185,11 +185,11 @@ Processing time depends on the file length and available hardware. A successful 
 
 ## Application Routes
 
-| Method | Route | Description |
-| --- | --- | --- |
-| `GET` | `/` | Renders the upload and transcription interface. |
-| `POST` | `/transcribe` | Accepts an uploaded audio file, processes it, saves a server-side `.txt` result, and returns plain text. |
-| `GET` | `/download?filename=...` | Downloads a previously generated text file from the server, if it exists. |
+| Method | Route                    | Description                                                                                              |
+| ------ | ------------------------ | -------------------------------------------------------------------------------------------------------- |
+| `GET`  | `/`                      | Renders the upload and transcription interface.                                                          |
+| `POST` | `/transcribe`            | Accepts an uploaded audio file, processes it, saves a server-side `.txt` result, and returns plain text. |
+| `GET`  | `/download?filename=...` | Downloads a previously generated text file from the server, if it exists.                                |
 
 The current frontend's **Download** button creates a text file directly in the browser using a Blob. It does not call the `/download` route.
 
