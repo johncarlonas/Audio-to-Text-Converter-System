@@ -67,20 +67,6 @@ The browser presents the upload interface and sends an audio file to Flask. The 
 
 Uploaded audio files and server-generated transcripts are stored in local `uploads/` and `texts/` directories. They are not automatically deleted by the current implementation.
 
-## Transcription Workflow
-
-<div align="center">
-  <img src="assets/app-flow.png" alt="Audio transcription workflow" width="1000" />
-</div>
-
-1. The user selects a local audio file and submits it.
-2. JavaScript sends a `POST` request containing the file to Flask.
-3. FFmpeg converts the uploaded media to WAV.
-4. Librosa identifies non-silent audio intervals and writes temporary chunks.
-5. Whisper transcribes each chunk using the `base` model.
-6. The backend formats the text and returns it to the browser.
-7. The user can copy the transcript or download a `.txt` file.
-
 ## Project Structure
 
 ```text
