@@ -3,10 +3,8 @@ import re
 import tempfile
 import subprocess
 
-import whisper
-import librosa
-import soundfile as sf
 from flask import Flask, request, send_file, render_template, Response
+from faster_whisper import WhisperModel
 
 app = Flask(__name__)
 
@@ -15,13 +13,11 @@ TEXT_FOLDER = "texts"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(TEXT_FOLDER, exist_ok=True)
 
-model = whisper.load_model("base")
-
+model = WhisperModel("base", compute_type="int8") 
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
 
 @app.route('/transcribe', methods=['POST'])
 def transcribe():
@@ -39,7 +35,7 @@ def transcribe():
     wav_path = convert_to_wav(audio_path)
 
     try:
-        formatted_text = silence_chunk_transcription(wav_path)
+        formatted_text = transcribe_with_faster_whisper(wav_path)
     except Exception as e:
         print("Transcription error:", e)
         return f"Error during transcription: {str(e)}", 500
@@ -48,9 +44,7 @@ def transcribe():
     with open(text_path, "w", encoding="utf-8") as f:
         f.write(formatted_text)
 
-    
     return Response(formatted_text, mimetype='text/plain')
-
 
 @app.route('/download')
 def download():
@@ -63,7 +57,6 @@ def download():
     else:
         return "File not found", 404
 
-
 def convert_to_wav(input_path):
     wav_path = os.path.splitext(input_path)[0] + ".wav"
     subprocess.run(
@@ -73,31 +66,12 @@ def convert_to_wav(input_path):
     )
     return wav_path
 
-
-def silence_chunk_transcription(file_path):
-    y, sr = librosa.load(file_path, sr=16000)
-    intervals = librosa.effects.split(y, top_db=30)
-
-    all_segments = []
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        for i, (start, end) in enumerate(intervals):
-            chunk_path = os.path.join(tmpdir, f"chunk{i}.wav")
-            sf.write(chunk_path, y[start:end], sr)
-
-            result = model.transcribe(chunk_path)
-            if 'segments' in result:
-                all_segments.extend(result['segments'])
-            else:
-                all_segments.append({'text': result['text']})
-
-    return format_transcript(all_segments)
-
-
-def format_transcript(segments):
+def transcribe_with_faster_whisper(file_path):
+    segments, _ = model.transcribe(file_path)
     transcript = ""
+
     for seg in segments:
-        text = seg['text'].strip()
+        text = seg.text.strip()
         text = text.replace("[inaudible]", "____")
 
         for filler in ["you know", "like", "I mean", "so", "actually", "basically"]:
@@ -112,7 +86,6 @@ def format_transcript(segments):
         transcript += f"\n\n{text}"
 
     return transcript.strip()
-
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -21,6 +21,8 @@ uploadForm.addEventListener("submit", async function (e) {
   }
 
   loadingOverlay.classList.remove("hidden");
+  textArea.value = "";
+  generatedText = "";
 
   const formData = new FormData();
   formData.append("audio", file);
@@ -32,14 +34,24 @@ uploadForm.addEventListener("submit", async function (e) {
       body: formData,
     });
 
-    const text = await response.text();
-
-    if (!response.ok || text.toLowerCase().startsWith("error")) {
-      textArea.value = "Error: " + text;
-    } else {
-      textArea.value = text;
-      generatedText = text;
+    if (!response.ok) {
+      textArea.value = "Error: Transcription failed.";
+      loadingOverlay.classList.add("hidden");
+      return;
     }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      textArea.value += chunk;
+      generatedText += chunk;
+    }
+
   } catch (err) {
     textArea.value = "Error: Could not upload or transcribe.";
     console.error(err);
