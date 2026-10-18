@@ -62,7 +62,7 @@ The current implementation processes **uploaded audio files**, not live micropho
 The browser presents the upload interface and sends an audio file to Flask. The server converts and processes that file locally, runs transcription, formats the result, and returns plain text to the browser.
 
 <div align="center">
-  <img src="assets/system-archi.png" alt="Audio to Text Converter system architecture" width="730" />
+  <img src="assets/system-archi.png" alt="Audio to Text Converter system architecture" width="300" />
 </div>
 
 Uploaded audio files and server-generated transcripts are stored in local `uploads/` and `texts/` directories. They are not automatically deleted by the current implementation.
